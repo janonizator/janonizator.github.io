@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Janonizator</title>
+    <meta name="description" content="Transforme sua foto num vídeo com a ordem do dia, pronto para o Instagram. Tudo roda no seu aparelho." />
+    <meta name="theme-color" content="#0d0c0a" />
+    <meta property="og:title" content="Janonizator" />
+    <meta property="og:description" content="Sua foto vira vídeo com a ordem do dia, pronto para o Instagram." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://janonizator.github.io/" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d0c0a'/%3E%3Ctext x='32' y='47' font-family='Didot,serif' font-size='44' text-anchor='middle' fill='%23f4efe6'%3EJ%3C/text%3E%3C/svg%3E" />
+    <link rel="preload" href="fonts/gfs-didot-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="modulepreload" href="js/app.js" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script data-goatcounter="https://janonizator.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+  </head>
+  <body>
+    <header class="topo">
+      <h1>Janonizator</h1>
+      <p class="sub">Sua foto vira vídeo com a ordem do dia, pronto para postar.</p>
+    </header>
+
+    <main>
+      <section class="ordem" aria-labelledby="ordem-titulo">
+        <h2 id="ordem-titulo">A ordem de hoje</h2>
+        <blockquote id="ordem-texto"></blockquote>
+      </section>
+
+      <section class="cartao" aria-live="polite">
+        <p id="erro" class="erro" role="alert" hidden></p>
+
+        <!-- 1. Escolher foto -->
+        <div id="etapa-inicio">
+          <label id="dropzone" class="dropzone" for="foto-input">
+            <span class="dropzone-titulo">Escolher foto</span>
+            <span class="dropzone-sub">ou arraste uma imagem para cá · JPG, PNG, WebP ou HEIC</span>
+          </label>
+        </div>
+        <input id="foto-input" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" hidden />
+
+        <!-- 2. Formato e recorte -->
+        <div id="etapa-editor" hidden>
+          <fieldset class="formatos">
+            <legend>Onde você vai postar?</legend>
+            <label><input type="radio" name="formato" value="reels" checked /><span>Reels / Stories <small>9:16 · recomendado</small></span></label>
+            <label><input type="radio" name="formato" value="feed" /><span>Feed <small>4:5</small></span></label>
+          </fieldset>
+
+          <div id="crop-viewport" class="crop" style="--ar: 9 / 16; --arn: 0.5625">
+            <canvas id="crop-foto"></canvas>
+            <canvas id="crop-texto" aria-hidden="true"></canvas>
+            <div class="grade" aria-hidden="true"></div>
+          </div>
+          <p class="dica">Arraste para enquadrar. Use dois dedos, a roda do mouse ou o controle abaixo para aproximar.</p>
+          <label class="zoom">
+            <span>Zoom</span>
+            <input id="crop-zoom" type="range" min="1" max="4" step="0.01" value="1" />
+          </label>
+
+          <p id="aviso" class="aviso" hidden>
+            Seu navegador não tem codificação de vídeo acelerada. Vamos usar um modo de compatibilidade, que baixa
+            cerca de 31&nbsp;MB e é bem mais lento. Para uma experiência melhor, use uma versão recente do Chrome,
+            Edge ou Safari.
+          </p>
+
+          <div class="acoes">
+            <button id="gerar" class="botao primario" type="button">Gerar vídeo</button>
+            <button id="trocar-foto" class="botao" type="button">Trocar foto</button>
+          </div>
+        </div>
+
+        <!-- 3. Progresso -->
+        <div id="etapa-progresso" hidden>
+          <p id="progresso-texto" class="progresso-texto">Preparando…</p>
+          <div class="progresso"><div id="progresso-barra"></div></div>
+        </div>
+
+        <!-- 4. Resultado -->
+        <div id="etapa-resultado" hidden>
+          <video id="resultado-video" class="resultado" controls playsinline loop></video>
+          <div class="acoes">
+            <button id="compartilhar" class="botao primario" type="button" hidden>Compartilhar</button>
+            <a id="baixar" class="botao primario" href="#" download>
+              <!-- Material Symbols "download" (Google, Apache 2.0), inline para não carregar a fonte de ícones -->
+              <svg class="icone" viewBox="0 -960 960 960" aria-hidden="true"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" /></svg>
+              Baixar vídeo
+            </a>
+            <button id="novo" class="botao" type="button">Fazer outro</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="info">
+        <h2>Como funciona</h2>
+        <ol>
+          <li>Escolha uma foto do seu aparelho.</li>
+          <li>Diga onde vai postar e ajuste o enquadramento.</li>
+          <li>Toque em <strong>Gerar vídeo</strong>: sua foto ganha um zoom lento, a ordem do dia por cima e o áudio.</li>
+          <li>Baixe ou compartilhe direto no Instagram. O vídeo sai em 1080p, 30 qps, no formato que o Instagram recomenda.</li>
+        </ol>
+
+        <h2>Privacidade</h2>
+        <p>
+          <strong>Sua foto não sai do seu aparelho.</strong> Todo o processamento acontece no seu próprio navegador e
+          nada é enviado para nenhum servidor. Contamos visitas de forma anônima com o GoatCounter, sem cookies e sem
+          dados pessoais.
+        </p>
+      </section>
+    </main>
+
+    <footer class="rodape">
+      <p>
+        O Janonizator é um projeto independente. Este site <strong>não é de responsabilidade de André Janones</strong>
+        e não tem nenhuma ligação com André Janones nem com o GitHub, que apenas hospeda as páginas.
+      </p>
+      <p><a href="https://github.com/janonizator/janonizator.github.io">Código-fonte</a></p>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
