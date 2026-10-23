@@ -104,6 +104,34 @@ h2 {
   padding: 20px;
 }
 
+/* ---------- Como funciona e Privacidade ---------- */
+
+.como-funciona {
+  margin-bottom: 16px;
+}
+
+.privacidade {
+  margin-top: 16px;
+}
+
+.privacidade p {
+  margin: 0;
+  color: var(--texto-suave);
+}
+
+.como-funciona ol {
+  padding-left: 22px;
+  margin: 0;
+}
+
+.como-funciona li {
+  margin-bottom: 6px;
+}
+
+.como-funciona li:last-child {
+  margin-bottom: 0;
+}
+
 .dropzone {
   display: flex;
   flex-direction: column;
@@ -348,28 +376,10 @@ h2 {
   background: #000;
 }
 
-/* ---------- Informações e rodapé ---------- */
+/* ---------- Rodapé ---------- */
 
-.info {
-  margin: 40px 0;
-}
-
-.info ol {
-  padding-left: 22px;
-  margin: 0 0 28px;
-}
-
-.info li {
-  margin-bottom: 6px;
-}
-
-.info p {
-  margin: 0;
-  color: var(--texto-suave);
-}
-
-.info strong {
-  color: var(--texto);
+main {
+  padding-bottom: 40px;
 }
 
 .rodape {
