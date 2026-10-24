@@ -327,6 +327,54 @@ h2 {
   filter: brightness(0.92);
 }
 
+/* brilho pulsando em volta e um reflexo que atravessa o botão */
+.botao.brilho {
+  position: relative;
+  overflow: hidden;
+  animation: brilho-pulso 2.4s ease-in-out infinite;
+}
+
+.botao.brilho::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.9) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: brilho-reflexo 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes brilho-pulso {
+  0%,
+  100% {
+    box-shadow: 0 0 6px 1px rgb(255 214 140 / 0.35);
+  }
+  50% {
+    box-shadow: 0 0 22px 6px rgb(255 214 140 / 0.75);
+  }
+}
+
+@keyframes brilho-reflexo {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botao.brilho,
+  .botao.brilho::after {
+    animation: none;
+  }
+
+  .botao.brilho {
+    box-shadow: 0 0 14px 3px rgb(255 214 140 / 0.55);
+  }
+}
+
 .botao:focus-visible {
   outline: 2px solid var(--texto);
   outline-offset: 3px;
